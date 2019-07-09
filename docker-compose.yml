@@ -1,0 +1,85 @@
+version: "3"
+services:
+
+  ssa-ui:
+    image: understate/ssa-ui:dev
+    ports:
+      - "8888:8888"
+    networks:
+      - ssa-net
+    depends_on:
+      - ssa-api-gateway
+    restart: on-failure
+
+  ssa-api-gateway:
+    image: understate/ssa-api-gateway:dev
+    networks:
+      - ssa-net
+    depends_on:                                                                                                           
+      - ssa-uaa
+      - ssa-query-engine
+    command:
+      - --uaa-server=http://${SSA_UI:-localhost}:8888/uaa
+    restart: on-failure
+
+  ssa-uaa:
+    image: understate/ssa-uaa:dev
+    networks:
+      - ssa-net
+    depends_on:
+      - ssa-uaa-mysql
+    restart: on-failure
+
+  ssa-query-engine:
+    image: understate/ssa-query-engine:dev
+    networks:
+      - ssa-net
+    depends_on:
+      - ssa-redis
+      - ssa-elasticsearch
+    restart: on-failure
+
+  ssa-uaa-mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=ssa_uaa
+      - MYSQL_ROOT_PASSWORD=password
+    command:
+      - --lower_case_table_names=1
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - ssa-net
+    restart: on-failure
+
+  ssa-elasticsearch:
+    image: elasticsearch:6.8.1
+    environment:
+      - discovery.type=single-node
+    networks:
+      - ssa-net
+    restart: on-failure                                                                                                   
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:9200"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
+  ssa-redis:                                                                                                          
+    image: redis:5
+    command:
+      - --appendonly yes                                                         
+    networks:
+      - ssa-net
+    restart: on-failure
+
+  ssa-es-test-data:
+    image: understate/ssa-es-test-data:dev
+    restart: on-failure
+    networks:
+      - ssa-net
+    depends_on:
+      - ssa-elasticsearch
+
+networks:
+  ssa-net:
