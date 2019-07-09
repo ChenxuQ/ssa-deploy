@@ -1,7 +1,7 @@
 # SSA
 Security Situation Awareness
 
-### Running on local environment
+### Running demo on local environment
 ```sh
     # Start SSA Application
     docker-compose up -d
