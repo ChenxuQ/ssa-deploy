@@ -1,7 +1,9 @@
 # SSA
 Security Situation Awareness
-https://localhost:8888
-https://${SSA_UI}:8888
+```
+http://localhost:8888
+http://${SSA_UI}:8888
+```
 
 ### Running demo on local environment
 ```sh
