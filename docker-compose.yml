@@ -19,7 +19,7 @@ services:
       - ssa-uaa
       - ssa-query-engine
     command:
-      - --uaa-server=http://${SSA_UI:-localhost}:8888/uaa
+      - --uaa-server=http://${SSA_UI:-ssa-ui}:8888/uaa
     restart: on-failure
 
   ssa-uaa:
