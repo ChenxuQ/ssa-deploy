@@ -53,7 +53,7 @@ services:
     restart: on-failure
 
   ssa-elasticsearch:
-    image: elasticsearch:6.8.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.1
     environment:
       - discovery.type=single-node
     networks:
