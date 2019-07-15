@@ -3,6 +3,11 @@ Security Situation Awareness
 
 ### Running demo on server
 http://${SSA_UI}:8888
+
+```sh
+    # Start ssa application
+    sh start.sh
+```
 ```sh
     # Find server's ip address
     ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"
